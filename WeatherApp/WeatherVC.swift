@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  WeatherVC.swift
 //  WeatherApp
 //
 //  Created by MAC on 29/09/2016.
@@ -8,18 +8,64 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class WeatherVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var currentTempLabel: UILabel!
+    @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var currentWeatherImage: UIImageView!
+    @IBOutlet weak var currentWeatherLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    
+    var currentWeather: CurrentWeather!
+    var forecast: Forecast!
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        currentWeather = CurrentWeather()
+        forecast = Forecast()
+        
+        
+        func downloadForecastData(completed: DownloadComplete) {
+            //Download forecast for tableview
+            
+            let forecast = 
+        }
+        
+        
+        
+        
+        currentWeather.downloadWeatherDetails{
+            self.updateMainUI()
+        }
+
+            
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
 
 
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 6
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath)
+        
+        return cell
+    }
+    
+    func updateMainUI() {
+        dateLabel.text = currentWeather.date
+        currentTempLabel.text = "\(currentWeather.currentTemp)"
+        currentWeatherLabel.text = currentWeather.weatherType
+        locationLabel.text = currentWeather.cityName
+        currentWeatherImage.image = UIImage(named: currentWeather.weatherType)
+    }
 }
 
