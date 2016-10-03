@@ -53,8 +53,7 @@ class CurrentWeather {
     
     func downloadWeatherDetails(completed: @escaping DownloadComplete){
         //Alamofire download
-        let currentWeatherURL = URL(string: CURRENT_WEATHER_URL)!
-        Alamofire.request(currentWeatherURL).responseJSON { response in
+        Alamofire.request(CURRENT_WEATHER_URL).responseJSON { response in
          let result = response.result
             
             //Si la valeur retournée par result.value as? Dictionary<String, AnyObject> n’est pas nil alors, créer une nouvelle constante appelée dict et lui attribuer la valeur du champs "name" du tableau
@@ -77,14 +76,12 @@ class CurrentWeather {
                 if let main = dict["main"] as? Dictionary<String, AnyObject> {
                     if let temp = main["temp"] as? Double {
                         self._currentTemp = Double(round(temp - 273.15))
-                        print(self._currentTemp)
-                    }
+                        print(self._currentTemp)                    }
                 }
                 
             }
-            
+         completed()
         }
-        completed()
     }
 }
 
